@@ -1,0 +1,8 @@
+#!/bin/sh
+rm -rf buildfiles
+mkdir buildfiles
+cd buildfiles
+cmake "$@" ..
+make
+make test
+cd ..
