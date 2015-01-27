@@ -1,4 +1,4 @@
-# Nitrine Math
+# Nitrine Math [![Build Status](https://travis-ci.org/theakman2/libntm.svg?branch=master)](https://travis-ci.org/theakman2/libntm)
 
 A port of the [glmatrix](https://github.com/toji/gl-matrix) javascript library
 to ANSI C (C89) for manipulating vectors, matrices and quaternions for OpenGL
