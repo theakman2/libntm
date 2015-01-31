@@ -127,17 +127,21 @@ NtmMat3 *ntm_mat3_invert(NtmMat3 *out, NtmMat3 *a) {
 		b21 = a21 * a10 - a11 * a20,
 
 		/* Calculate the determinant */
-		invDet = 1.0f / (a00 * b01 + a01 * b11 + a02 * b21);
+		det = a00 * b01 + a01 * b11 + a02 * b21;
+	if (fabs(det) < NTM_EPSILON) {
+		return NULL;
+	}
+	det = 1.0f / det;
 
-	out->data[0] = b01 * invDet;
-	out->data[1] = (-a22 * a01 + a02 * a21) * invDet;
-	out->data[2] = (a12 * a01 - a02 * a11) * invDet;
-	out->data[3] = b11 * invDet;
-	out->data[4] = (a22 * a00 - a02 * a20) * invDet;
-	out->data[5] = (-a12 * a00 + a02 * a10) * invDet;
-	out->data[6] = b21 * invDet;
-	out->data[7] = (-a21 * a00 + a01 * a20) * invDet;
-	out->data[8] = (a11 * a00 - a01 * a10) * invDet;
+	out->data[0] = b01 * det;
+	out->data[1] = (-a22 * a01 + a02 * a21) * det;
+	out->data[2] = (a12 * a01 - a02 * a11) * det;
+	out->data[3] = b11 * det;
+	out->data[4] = (a22 * a00 - a02 * a20) * det;
+	out->data[5] = (-a12 * a00 + a02 * a10) * det;
+	out->data[6] = b21 * det;
+	out->data[7] = (-a21 * a00 + a01 * a20) * det;
+	out->data[8] = (a11 * a00 - a01 * a10) * det;
 	return out;
 }
 
@@ -359,19 +363,22 @@ NtmMat3 *ntm_mat3_normalFromMat4(NtmMat3 *out, NtmMat4 *a) {
 		b11 = a22 * a33 - a23 * a32,
 
 		/* Calculate the determinant */
-		invDet = 1.0f / (b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06);
+		det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+	if (fabs(det) < NTM_EPSILON) {
+		return NULL;
+	}
+	det = 1.0f/det;
+	out->data[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det;
+	out->data[1] = (a12 * b08 - a10 * b11 - a13 * b07) * det;
+	out->data[2] = (a10 * b10 - a11 * b08 + a13 * b06) * det;
 
-	out->data[0] = (a11 * b11 - a12 * b10 + a13 * b09) * invDet;
-	out->data[1] = (a12 * b08 - a10 * b11 - a13 * b07) * invDet;
-	out->data[2] = (a10 * b10 - a11 * b08 + a13 * b06) * invDet;
+	out->data[3] = (a02 * b10 - a01 * b11 - a03 * b09) * det;
+	out->data[4] = (a00 * b11 - a02 * b08 + a03 * b07) * det;
+	out->data[5] = (a01 * b08 - a00 * b10 - a03 * b06) * det;
 
-	out->data[3] = (a02 * b10 - a01 * b11 - a03 * b09) * invDet;
-	out->data[4] = (a00 * b11 - a02 * b08 + a03 * b07) * invDet;
-	out->data[5] = (a01 * b08 - a00 * b10 - a03 * b06) * invDet;
-
-	out->data[6] = (a31 * b05 - a32 * b04 + a33 * b03) * invDet;
-	out->data[7] = (a32 * b02 - a30 * b05 - a33 * b01) * invDet;
-	out->data[8] = (a30 * b04 - a31 * b02 + a33 * b00) * invDet;
+	out->data[6] = (a31 * b05 - a32 * b04 + a33 * b03) * det;
+	out->data[7] = (a32 * b02 - a30 * b05 - a33 * b01) * det;
+	out->data[8] = (a30 * b04 - a31 * b02 + a33 * b00) * det;
 
 	return out;
 }

@@ -123,6 +123,12 @@ NtmVec2 *ntm_vec2_negate(NtmVec2 *out, NtmVec2 *a) {
 }
 
 NtmVec2 *ntm_vec2_inverse(NtmVec2 *out, NtmVec2 *a) {
+	if (
+		(fabs(a->data[0]) < NTM_EPSILON)
+		|| (fabs(a->data[1]) < NTM_EPSILON)
+	) {
+		return NULL;
+	}
 	out->data[0] = 1.0f / a->data[0];
 	out->data[1] = 1.0f / a->data[1];
 	return out;
@@ -130,9 +136,13 @@ NtmVec2 *ntm_vec2_inverse(NtmVec2 *out, NtmVec2 *a) {
 
 NtmVec2 *ntm_vec2_normalize(NtmVec2 *out, NtmVec2 *a) {
 	float x = a->data[0], y = a->data[1];
-	float invLen = 1.0f / (float)sqrt(x*x + y*y);
-	out->data[0] = a->data[0] * invLen;
-	out->data[1] = a->data[1] * invLen;
+	float len = (float)sqrt(x*x + y*y);
+	if (len < NTM_EPSILON) {
+		return NULL;
+	}
+	len = 1.0f / len;
+	out->data[0] = a->data[0] * len;
+	out->data[1] = a->data[1] * len;
 	return out;
 }
 

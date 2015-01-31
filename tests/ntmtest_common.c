@@ -3,7 +3,7 @@
 
 #include "ntmtest_common.h"
 
-int ntmtest_assert(int got, int line, char *filepath) {
+int ntmtest_assert(int got, int line, const char *filepath) {
 	if (got) {
 		printf("PASS\t%04d\t%s\n", line, filepath);
 		return 0;
@@ -12,7 +12,7 @@ int ntmtest_assert(int got, int line, char *filepath) {
 	return 1;
 }
 
-int ntmtest_eqf(float got, float expected, int line, char *filepath) {
+int ntmtest_eqf(float got, float expected, int line, const char *filepath) {
 	if (fabs(got - expected) < NTMTEST_EPSILON) {
 		printf("PASS\t%04d\t%s\n", line, filepath);
 		return 0;
@@ -32,7 +32,7 @@ int ntmtest_vec2Eq(
 	float a0,
 	float a1,
 	int line,
-	char *filepath
+	const char *filepath
 ) {
 	if (
 		(fabs(got->data[0] - (a0)) < NTMTEST_EPSILON)
@@ -60,7 +60,7 @@ int ntmtest_vec3Eq(
 	float a1,
 	float a2,
 	int line,
-	char *filepath
+	const char *filepath
 ) {
 	if (
 		(fabs(got->data[0] - (a0)) < NTMTEST_EPSILON)
@@ -92,7 +92,7 @@ int ntmtest_vec4Eq(
 	float a2,
 	float a3,
 	int line,
-	char *filepath
+	const char *filepath
 ) {
 	if (
 		(fabs(got->data[0] - (a0)) < NTMTEST_EPSILON)
@@ -127,7 +127,7 @@ int ntmtest_quatEq(
 	float a2,
 	float a3,
 	int line,
-	char *filepath
+	const char *filepath
 ) {
 	if (
 		(fabs(got->data[0] - (a0)) < NTMTEST_EPSILON)
@@ -162,7 +162,7 @@ int ntmtest_mat2Eq(
 	float a2,
 	float a3,
 	int line,
-	char *filepath
+	const char *filepath
 ) {
 	if (
 		(fabs(got->data[0] - (a0)) < NTMTEST_EPSILON)
@@ -199,7 +199,7 @@ int ntmtest_mat2dEq(
 	float a4,
 	float a5,
 	int line,
-	char *filepath
+	const char *filepath
 ) {
 	if (
 		(fabs(got->data[0] - (a0)) < NTMTEST_EPSILON)
@@ -245,7 +245,7 @@ int ntmtest_mat3Eq(
 	float a7,
 	float a8,
 	int line,
-	char *filepath
+	const char *filepath
 ) {
 	if (
 		(fabs(got->data[0] - (a0)) < NTMTEST_EPSILON)
@@ -307,7 +307,7 @@ int ntmtest_mat4Eq(
 	float a14,
 	float a15,
 	int line,
-	char *filepath
+	const char *filepath
 ) {
 	if (
 		(fabs(got->data[0] - (a0)) < NTMTEST_EPSILON)

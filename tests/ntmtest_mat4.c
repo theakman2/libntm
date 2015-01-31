@@ -101,6 +101,15 @@ int ntmtest_mat4_invert(void) {
 		-0.341269841269841f, 0.021428571428571f, 0.016666666666667f, 0.046031746031746f
 	);
 	
+	ntm_mat4_set(&a,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f
+	);
+	
+	NTMTEST_ASSERT(ntm_mat4_invert(&a, &a) == NULL);
+	
 	return 0;
 }
 

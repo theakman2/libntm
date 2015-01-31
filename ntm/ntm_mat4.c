@@ -156,24 +156,29 @@ NtmMat4 *ntm_mat4_invert(NtmMat4 *out, NtmMat4 *a) {
 		b10 = a21 * a33 - a23 * a31,
 		b11 = a22 * a33 - a23 * a32,
 
-		invDet = 1.0f / (b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06);
+		det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+	
+	if (fabs(det) < NTM_EPSILON) {
+		return NULL;
+	}
+	det = 1.0f / det;
 
-	out->data[0] = (a11 * b11 - a12 * b10 + a13 * b09) * invDet;
-	out->data[1] = (a02 * b10 - a01 * b11 - a03 * b09) * invDet;
-	out->data[2] = (a31 * b05 - a32 * b04 + a33 * b03) * invDet;
-	out->data[3] = (a22 * b04 - a21 * b05 - a23 * b03) * invDet;
-	out->data[4] = (a12 * b08 - a10 * b11 - a13 * b07) * invDet;
-	out->data[5] = (a00 * b11 - a02 * b08 + a03 * b07) * invDet;
-	out->data[6] = (a32 * b02 - a30 * b05 - a33 * b01) * invDet;
-	out->data[7] = (a20 * b05 - a22 * b02 + a23 * b01) * invDet;
-	out->data[8] = (a10 * b10 - a11 * b08 + a13 * b06) * invDet;
-	out->data[9] = (a01 * b08 - a00 * b10 - a03 * b06) * invDet;
-	out->data[10] = (a30 * b04 - a31 * b02 + a33 * b00) * invDet;
-	out->data[11] = (a21 * b02 - a20 * b04 - a23 * b00) * invDet;
-	out->data[12] = (a11 * b07 - a10 * b09 - a12 * b06) * invDet;
-	out->data[13] = (a00 * b09 - a01 * b07 + a02 * b06) * invDet;
-	out->data[14] = (a31 * b01 - a30 * b03 - a32 * b00) * invDet;
-	out->data[15] = (a20 * b03 - a21 * b01 + a22 * b00) * invDet;
+	out->data[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det;
+	out->data[1] = (a02 * b10 - a01 * b11 - a03 * b09) * det;
+	out->data[2] = (a31 * b05 - a32 * b04 + a33 * b03) * det;
+	out->data[3] = (a22 * b04 - a21 * b05 - a23 * b03) * det;
+	out->data[4] = (a12 * b08 - a10 * b11 - a13 * b07) * det;
+	out->data[5] = (a00 * b11 - a02 * b08 + a03 * b07) * det;
+	out->data[6] = (a32 * b02 - a30 * b05 - a33 * b01) * det;
+	out->data[7] = (a20 * b05 - a22 * b02 + a23 * b01) * det;
+	out->data[8] = (a10 * b10 - a11 * b08 + a13 * b06) * det;
+	out->data[9] = (a01 * b08 - a00 * b10 - a03 * b06) * det;
+	out->data[10] = (a30 * b04 - a31 * b02 + a33 * b00) * det;
+	out->data[11] = (a21 * b02 - a20 * b04 - a23 * b00) * det;
+	out->data[12] = (a11 * b07 - a10 * b09 - a12 * b06) * det;
+	out->data[13] = (a00 * b09 - a01 * b07 + a02 * b06) * det;
+	out->data[14] = (a31 * b01 - a30 * b03 - a32 * b00) * det;
+	out->data[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
 	return out;
 }
 
@@ -308,24 +313,26 @@ NtmMat4 *ntm_mat4_scale(NtmMat4 *out, NtmMat4 *a, NtmVec3 *v) {
 }
 
 NtmMat4 *ntm_mat4_rotate(NtmMat4 *out, NtmMat4 *a, float rad, NtmVec3 *axis) {
-	float x = axis->data[0];
-	float y = axis->data[1];
-	float z = axis->data[2];
-	float invLen = 1.0f / (float)sqrt(x * x + y * y + z * z);
+	float x = axis->data[0], y = axis->data[1], z = axis->data[2];
 	float s, c, t, a00, a01, a02, a03,
 		a10, a11, a12, a13,
 		a20, a21, a22, a23,
 		b00, b01, b02,
 		b10, b11, b12,
 		b20, b21, b22;
+	float len = (float)sqrt(x * x + y * y + z * z);
+	if (len < NTM_EPSILON) {
+		return NULL;
+	}
+	len = 1.0f / len;
 
 	s = (float)sin(rad);
 	c = (float)cos(rad);
 	t = 1.0f - c;
 
-	x *= invLen;
-	y *= invLen;
-	z *= invLen;
+	x *= len;
+	y *= len;
+	z *= len;
 
 	a00 = a->data[0]; a01 = a->data[1]; a02 = a->data[2]; a03 = a->data[3];
 	a10 = a->data[4]; a11 = a->data[5]; a12 = a->data[6]; a13 = a->data[7];
@@ -505,16 +512,20 @@ NtmMat4 *ntm_mat4_fromScaling(NtmMat4 *out, NtmVec3 *v) {
 
 NtmMat4 *ntm_mat4_fromRotation(NtmMat4 *out, float rad, NtmVec3 *axis) {
 	float x = axis->data[0], y = axis->data[1], z = axis->data[2];
-	float invLen = 1.0f / (float)sqrt(x * x + y * y + z * z);
+	float len = (float)sqrt(x * x + y * y + z * z);
 	float s, c, t;
-
+	if (len < NTM_EPSILON) {
+		return NULL;
+	}
+	len = 1.0f / len;
+	
 	s = (float)sin(rad);
 	c = (float)cos(rad);
 	t = 1.0f - c;
 
-	x *= invLen;
-	y *= invLen;
-	z *= invLen;
+	x *= len;
+	y *= len;
+	z *= len;
 
 	out->data[0] = x * x * t + c;
 	out->data[1] = y * x * t + z * s;
@@ -790,7 +801,7 @@ NtmMat4 *ntm_mat4_ortho(
 }
 
 NtmMat4 *ntm_mat4_lookAt(NtmMat4 *out, NtmVec3 *eye, NtmVec3 *center, NtmVec3 *up) {
-	float x0, x1, x2, y0, y1, y2, z0, z1, z2, len,
+	float x0, x1, x2, y0, y1, y2,
 		eyex = eye->data[0],
 		eyey = eye->data[1],
 		eyez = eye->data[2],
@@ -799,22 +810,18 @@ NtmMat4 *ntm_mat4_lookAt(NtmMat4 *out, NtmVec3 *eye, NtmVec3 *center, NtmVec3 *u
 		upz = up->data[2],
 		centerx = center->data[0],
 		centery = center->data[1],
-		centerz = center->data[2];
+		centerz = center->data[2],
+		z0 = eyex - centerx,
+		z1 = eyey - centery,
+		z2 = eyez - centerz,
+		len = (float)sqrt(z0 * z0 + z1 * z1 + z2 * z2);
 
-	if (
-		fabs(eyex - centerx) < NTM_EPSILON
-		&& fabs(eyey - centery) < NTM_EPSILON
-		&& fabs(eyez - centerz) < NTM_EPSILON
-	) {
+	if (len < NTM_EPSILON) {
 		ntm_mat4_identity(out);
 		return out;
 	}
 
-	z0 = eyex - centerx;
-	z1 = eyey - centery;
-	z2 = eyez - centerz;
-
-	len = 1.0f / (float)sqrt(z0 * z0 + z1 * z1 + z2 * z2);
+	len = 1.0f / len;
 	z0 *= len;
 	z1 *= len;
 	z2 *= len;
@@ -823,7 +830,7 @@ NtmMat4 *ntm_mat4_lookAt(NtmMat4 *out, NtmVec3 *eye, NtmVec3 *center, NtmVec3 *u
 	x1 = upz * z0 - upx * z2;
 	x2 = upx * z1 - upy * z0;
 	len = (float)sqrt(x0 * x0 + x1 * x1 + x2 * x2);
-	if (fabs(len) < NTM_EPSILON) {
+	if (len < NTM_EPSILON) {
 		x0 = 0.0f;
 		x1 = 0.0f;
 		x2 = 0.0f;
@@ -839,7 +846,7 @@ NtmMat4 *ntm_mat4_lookAt(NtmMat4 *out, NtmVec3 *eye, NtmVec3 *center, NtmVec3 *u
 	y2 = z0 * x1 - z1 * x0;
 
 	len = (float)sqrt(y0 * y0 + y1 * y1 + y2 * y2);
-	if (fabs(len) < NTM_EPSILON) {
+	if (len < NTM_EPSILON) {
 		y0 = 0.0f;
 		y1 = 0.0f;
 		y2 = 0.0f;

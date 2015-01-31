@@ -5,14 +5,14 @@
 
 	#define NTMTEST_EPSILON 0.0001
 
-	int ntmtest_assert(int got, int line, char *filepath);
-	int ntmtest_eqf(float got, float expected, int line, char *filepath);
+	int ntmtest_assert(int got, int line, const char *filepath);
+	int ntmtest_eqf(float got, float expected, int line, const char *filepath);
 	int ntmtest_vec2Eq(
 		NtmVec2 *got,
 		float a0,
 		float a1,
 		int line,
-		char *filepath
+		const char *filepath
 	);
 	int ntmtest_vec3Eq(
 		NtmVec3 *got,
@@ -20,7 +20,7 @@
 		float a1,
 		float a2,
 		int line,
-		char *filepath
+		const char *filepath
 	);
 	int ntmtest_vec4Eq(
 		NtmVec4 *got,
@@ -29,7 +29,7 @@
 		float a2,
 		float a3,
 		int line,
-		char *filepath
+		const char *filepath
 	);
 	int ntmtest_quatEq(
 		NtmQuat *got,
@@ -38,7 +38,7 @@
 		float a2,
 		float a3,
 		int line,
-		char *filepath
+		const char *filepath
 	);
 	int ntmtest_mat2Eq(
 		NtmMat2 *got,
@@ -47,7 +47,7 @@
 		float a2,
 		float a3,
 		int line,
-		char *filepath
+		const char *filepath
 	);
 	int ntmtest_mat2dEq(
 		NtmMat2d *got,
@@ -58,7 +58,7 @@
 		float a4,
 		float a5,
 		int line,
-		char *filepath
+		const char *filepath
 	);
 	int ntmtest_mat3Eq(
 		NtmMat3 *got,
@@ -72,7 +72,7 @@
 		float a7,
 		float a8,
 		int line,
-		char *filepath
+		const char *filepath
 	);
 	int ntmtest_mat4Eq(
 		NtmMat4 *got,
@@ -93,7 +93,7 @@
 		float a14,
 		float a15,
 		int line,
-		char *filepath
+		const char *filepath
 	);
 
 	#define NTMTEST_ASSERT(a) \

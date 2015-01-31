@@ -63,14 +63,18 @@ NtmMat2d *ntm_mat2d_invert(NtmMat2d *out, NtmMat2d *a) {
 	float aa = a->data[0], ab = a->data[1], ac = a->data[2], ad = a->data[3],
 		atx = a->data[4], aty = a->data[5];
 
-	float invDet = 1.0f / (aa * ad - ab * ac);
+	float det = aa * ad - ab * ac;
+	if (fabs(det) < NTM_EPSILON) {
+		return NULL;
+	}
+	det = 1.0f / det;
 
-	out->data[0] = ad * invDet;
-	out->data[1] = -ab * invDet;
-	out->data[2] = -ac * invDet;
-	out->data[3] = aa * invDet;
-	out->data[4] = (ac * aty - ad * atx) * invDet;
-	out->data[5] = (ab * atx - aa * aty) * invDet;
+	out->data[0] = ad * det;
+	out->data[1] = -ab * det;
+	out->data[2] = -ac * det;
+	out->data[3] = aa * det;
+	out->data[4] = (ac * aty - ad * atx) * det;
+	out->data[5] = (ab * atx - aa * aty) * det;
 	return out;
 }
 

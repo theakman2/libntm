@@ -276,13 +276,19 @@ NtmQuat *ntm_quat_slerp(NtmQuat *out, NtmQuat *a, NtmQuat *b, float t) {
 
 NtmQuat *ntm_quat_invert(NtmQuat *out, NtmQuat *a) {
 	float a0 = a->data[0], a1 = a->data[1], a2 = a->data[2], a3 = a->data[3],
-		dot = a0*a0 + a1*a1 + a2*a2 + a3*a3,
-		invDot = dot ? 1.0f/dot : 0.0f;
-
-	out->data[0] = -a0*invDot;
-	out->data[1] = -a1*invDot;
-	out->data[2] = -a2*invDot;
-	out->data[3] = a3*invDot;
+		dot = a0*a0 + a1*a1 + a2*a2 + a3*a3;
+	if (dot < NTM_EPSILON) {
+		out->data[0] = 0.0f;
+		out->data[1] = 0.0f;
+		out->data[2] = 0.0f;
+		out->data[3] = 0.0f;
+	} else {
+		dot = 1.0f/dot;
+		out->data[0] = -a0*dot;
+		out->data[1] = -a1*dot;
+		out->data[2] = -a2*dot;
+		out->data[3] = a3*dot;
+	}
 	return out;
 }
 
@@ -314,12 +320,16 @@ NtmQuat *ntm_quat_normalize(NtmQuat *out, NtmQuat *a) {
 	float x = a->data[0],
 		y = a->data[1],
 		z = a->data[2],
-		w = a->data[3];
-	float invLen = 1.0f / (float)sqrt(x*x + y*y + z*z + w*w);
-	out->data[0] = a->data[0] * invLen;
-	out->data[1] = a->data[1] * invLen;
-	out->data[2] = a->data[2] * invLen;
-	out->data[3] = a->data[3] * invLen;
+		w = a->data[3],
+		len = (float)sqrt(x*x + y*y + z*z + w*w);
+	if (len < NTM_EPSILON) {
+		return NULL;
+	}
+	len = 1.0f / len;
+	out->data[0] = a->data[0] * len;
+	out->data[1] = a->data[1] * len;
+	out->data[2] = a->data[2] * len;
+	out->data[3] = a->data[3] * len;
 	return out;
 }
 

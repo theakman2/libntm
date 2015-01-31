@@ -76,12 +76,16 @@ NtmMat2 *ntm_mat2_invert(NtmMat2 *out, NtmMat2 *a) {
 	float a0 = a->data[0], a1 = a->data[1], a2 = a->data[2], a3 = a->data[3],
 
 		/* Calculate the determinant */
-		invDet = 1.0f / (a0 * a3 - a2 * a1);
+		det = a0 * a3 - a2 * a1;
+	if (fabs(det) < NTM_EPSILON) {
+		return NULL;
+	}
+	det = 1.0f / (a0 * a3 - a2 * a1);
 
-	out->data[0] =  a3 * invDet;
-	out->data[1] = -a1 * invDet;
-	out->data[2] = -a2 * invDet;
-	out->data[3] =  a0 * invDet;
+	out->data[0] =  a3 * det;
+	out->data[1] = -a1 * det;
+	out->data[2] = -a2 * det;
+	out->data[3] =  a0 * det;
 
 	return out;
 }

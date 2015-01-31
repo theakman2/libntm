@@ -256,6 +256,9 @@ int ntmtest_quat_normalize(void) {
 		0.539163866f
 	);
 	
+	ntm_quat_set(&a, 0.0f, 0.0000001f, -0.0000001f, 0.0f);
+	
+	NTMTEST_ASSERT(ntm_quat_normalize(&a, &a) == NULL);
 	
 	return 0;
 }

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <math.h>
 
 #include "ntmtest_common.h"
@@ -53,6 +54,10 @@ int ntmtest_mat2d_invert(void) {
 		0.125050423557886f, 0.049415086728520f,
 		0.211617587736991f, 0.335235982250908f
 	);
+	
+	ntm_mat2d_set(&a, 2.0f, 3.0f, 2.0f, 3.0f, 0.0f, 1.5f);
+	
+	NTMTEST_ASSERT(ntm_mat2d_invert(&a, &a) == NULL);
 	
 	return 0;
 }

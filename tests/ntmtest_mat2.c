@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <math.h>
 
 #include "ntmtest_common.h"
@@ -46,7 +47,11 @@ int ntmtest_mat2_invert(void) {
 	ntm_mat2_invert(&a, &a);
 	
 	NTMTEST_MAT2EQ(&a, 2.0f, -1.0f, -0.75f, 0.5f);
-
+	
+	ntm_mat2_set(&a, 2.0f, 3.0f, 2.0f, 3.0f);
+	
+	NTMTEST_ASSERT(ntm_mat2_invert(&a, &a) == NULL);
+	
 	return 0;
 }
 

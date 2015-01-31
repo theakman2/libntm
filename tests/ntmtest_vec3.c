@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <math.h>
 
 #include "ntmtest_common.h"
@@ -202,7 +203,11 @@ int ntmtest_vec3_inverse(void) {
 	ntm_vec3_inverse(&a, &a);
 
 	NTMTEST_VEC3EQ(&a, 0.33333333333f, 0.25f, -0.1666666666667f);
-
+	
+	ntm_vec3_set(&a, 0.000001f, 0.0f, -0.0000001f);
+	
+	NTMTEST_ASSERT(ntm_vec3_inverse(&a, &a) == NULL);
+	
 	return 0;
 }
 
@@ -213,7 +218,11 @@ int ntmtest_vec3_normalize(void) {
 	ntm_vec3_normalize(&a, &a);
 
 	NTMTEST_VEC3EQ(&a, -0.108394406f, 0.325183218f, 0.939418185f);
-
+	
+	ntm_vec3_set(&a, 0.0000001f, -0.0000001f, 0.0000001f);
+	
+	NTMTEST_ASSERT(ntm_vec3_normalize(&a, &a) == NULL);
+	
 	return 0;
 }
 
